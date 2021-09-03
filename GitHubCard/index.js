@@ -5,26 +5,28 @@
 */
 const cards = document.querySelector('.cards');
 
-axios.get('https://api.github.com/users/ssamin225')
-  .then(resp => {
-    console.log(resp);
-    const cardObj = {
-      imageUrl: resp.data.avatar_url,
-      name: resp.data.name,
-      username: resp.data.login,
-      profileLink: resp.data.html_url,
-      followers: resp.data.followers,
-      following: resp.data.following,
-      bio: resp.data.bio
-    };
+function getData(username) {
+  axios.get(`https://api.github.com/users/${username}`)
+    .then(resp => {
+      console.log(resp);
+      const cardObj = {
+        imageUrl: resp.data.avatar_url,
+        name: resp.data.name,
+        username: resp.data.login,
+        profileLink: resp.data.html_url,
+        followers: resp.data.followers,
+        following: resp.data.following,
+        bio: resp.data.bio
+      };
 
-    const userCard = userCardMaker(cardObj);
-    cards.appendChild(userCard);
-  })
-  .catch(err => {
-    console.log('ERROR: ');
-    console.log(err);
-  })
+      const userCard = userCardMaker(cardObj);
+      cards.appendChild(userCard);
+    })
+    .catch(err => {
+      console.log('ERROR: ');
+      console.log(err);
+    })
+}
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -49,7 +51,8 @@ axios.get('https://api.github.com/users/ssamin225')
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['ssamin225', 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+followersArray.forEach(username => getData(username));
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
