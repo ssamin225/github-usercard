@@ -3,7 +3,28 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+const cards = document.querySelector('.cards');
 
+axios.get('https://api.github.com/users/ssamin225')
+  .then(resp => {
+    console.log(resp);
+    const cardObj = {
+      imageUrl: resp.data.avatar_url,
+      name: resp.data.name,
+      username: resp.data.login,
+      profileLink: resp.data.html_url,
+      followers: resp.data.followers,
+      following: resp.data.following,
+      bio: resp.data.bio
+    };
+
+    const userCard = userCardMaker(cardObj);
+    cards.appendChild(userCard);
+  })
+  .catch(err => {
+    console.log('ERROR: ');
+    console.log(err);
+  })
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -49,6 +70,47 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function userCardMaker(userObj) {
+  const card = document.createElement('div');
+  const cardImg = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const profile = document.createElement('p');
+  const profileLink = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.className = 'card';
+  cardInfo.className = 'card-info';
+  name.className = 'name';
+  username.className = 'username';
+
+  cardImg.setAttribute('src', userObj.imageUrl);
+  profileLink.setAttribute('href', userObj.profileLink);
+
+  name.textContent = userObj.name;
+  username.textContent = userObj.username;
+  profile.textContent = 'profile: ';
+  profileLink.textContent = userObj.profileLink;
+  followers.textContent = `followers: ${userObj.followers}`;
+  following.textContent = `followers: ${userObj.following}`;
+  bio.textContent = `bio: ${userObj.bio}`;
+
+  card.appendChild(cardImg);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
